@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +22,9 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
+
+// Setup routes.
+app.use("/api/v1/auth", authRoutes); // Auth Routes
 
 // Connect to DB and start the server
 mongoose
