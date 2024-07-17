@@ -87,26 +87,48 @@ export const login = async (req, res) => {
 };
 
 export const getProfile = async (req, res) => {
-  // try {
-  //   // Search for user profile using the userId sent in request.
-  //   console.log(req.userId);
-  //   const user = await User.findById(req.userId);
-  //   if (!user) {
-  //     return res.status(404).json({ message: "User not found" });
-  //   }
-  //   return res.status(200).json({
-  //     message: "User found",
-  //     user,
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  //   res
-  //     .status(400)
-  //     .json({ message: "Internal server error", data: error.mesage });
-  // }
+  try {
+    // Search for user profile using the userId sent in request.
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      message: "User found",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ message: "Internal server error", data: error.mesage });
+  }
 };
 
-export const updateProfile = async (req, res) => {};
+export const updateProfile = async (req, res) => {
+  try {
+    const { firstName, lastName, backgroundColorCode } = req.body;
+
+    // Look for the user and update.
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { firstName, lastName, backgroundColorCode },
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({
+      message: "Profile updated succesfully",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ message: "Internal server error", data: error.mesage });
+  }
+};
 
 export const addProfileImage = async (req, res) => {};
 
